@@ -1,0 +1,50 @@
+plugins {
+  id 'java-library'
+}
+
+group 'com.backendless'
+archivesBaseName = 'java-client-sdk'
+version '8.0.0'
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+task sourcesJar( type: Jar ) {
+  archiveClassifier.set( "sources" )
+  from sourceSets.main.allSource
+}
+
+task javadocJar( type: Jar ) {
+  archiveClassifier.set( "javadoc" )
+  from javadoc
+}
+
+artifacts {
+  archives sourcesJar, javadocJar
+}
+
+dependencies {
+  implementation project( ':java-sdk-common' )
+
+  implementation( group: "com.backendless", name: "commons", version: property( 'version-com.backendless-commons' ) ) {
+    exclude group: 'com.fasterxml.jackson.core'
+  }
+  implementation( group: "weborb", name: "weborbclient", version: property( 'version-weborb-weborbclient' ) )
+
+  compileOnly( "io.socket:socket.io-client:${property( 'version-io.socket-client' )}" ) {
+//       excluding org.json which is provided by Android
+    exclude group: 'org.json', module: 'json'
+  }
+
+  compileOnly( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
+  annotationProcessor( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
+
+  testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version-org.junit.jupiter' )}" )
+  testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version-org.junit.jupiter' )}" )
+}
+
+test {
+  useJUnitPlatform()
+}

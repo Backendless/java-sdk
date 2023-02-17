@@ -1,0 +1,7 @@
+.idea/
+.gradle
+android-client-sdk/build
+java-client-sdk/build
+java-sdk-common/build
+local.properties
+security.properties

@@ -1,0 +1,206 @@
+/*
+ * ********************************************************************************************************************
+ *  <p/>
+ *  BACKENDLESS.COM CONFIDENTIAL
+ *  <p/>
+ *  ********************************************************************************************************************
+ *  <p/>
+ *  Copyright 2012 BACKENDLESS.COM. All Rights Reserved.
+ *  <p/>
+ *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
+ *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
+ *  suppliers and may be covered by U.S. and Foreign Patents, patents in process, and are protected by trade secret
+ *  or copyright law. Dissemination of this information or reproduction of this material is strictly forbidden
+ *  unless prior written permission is obtained from Backendless.com.
+ *  <p/>
+ *  ********************************************************************************************************************
+ */
+
+package com.backendless;
+
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.async.message.AsyncMessage;
+import com.backendless.cache.CacheService;
+import com.backendless.cache.ICache;
+import com.backendless.core.responder.AdaptingResponder;
+import com.backendless.core.responder.policy.PoJoAdaptingPolicy;
+import com.backendless.exceptions.BackendlessException;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.utils.ReflectionUtil;
+import weborb.client.IChainedResponder;
+import weborb.types.IAdaptingType;
+import weborb.util.io.ISerializer;
+
+import java.lang.reflect.Type;
+import java.util.Date;
+
+
+public class Cache
+{
+  private final static String CACHE_SERVER_ALIAS = "com.backendless.services.redis.CacheService";
+
+  private final static Cache instance = new Cache();
+
+  static Cache getInstance()
+  {
+    return instance;
+  }
+
+  private final BackendlessInjector injector = BackendlessInjector.getInstance();
+
+  private Cache()
+  {
+  }
+
+  public <T> ICache<T> with( String key, Class<? extends T> type )
+  {
+    return new CacheService<>( type, key, this );
+  }
+
+  public void put( String key, Object object, int timeToLive, AsyncCallback<Object> callback )
+  {
+    byte[] bytes = serialize( object );
+    Invoker.invokeAsync( CACHE_SERVER_ALIAS, "putBytes", new Object[] { key, bytes, timeToLive }, callback );
+  }
+
+  public void put( String key, Object object, AsyncCallback<Object> callback )
+  {
+    put( key, object, 0, callback );
+  }
+
+  public void put( String key, Object object )
+  {
+    put( key, object, 0 );
+  }
+
+  public void put( String key, Object object, int timeToLive )
+  {
+    byte[] bytes = serialize( object );
+    Invoker.invokeSync( CACHE_SERVER_ALIAS, "putBytes", new Object[] { key, bytes, timeToLive }, getChainedResponder() );
+  }
+
+  public <T> T get( String key, Class<? extends T> type )
+  {
+    byte[] bytes = Invoker.invokeSync( CACHE_SERVER_ALIAS, "getBytes", new Object[] { key }, new AdaptingResponder<>( byte[].class, new PoJoAdaptingPolicy<byte[]>() ) );
+
+    if( bytes == null )
+      return null;
+
+    //Class argType = type.getClass();
+    return (T) deserialize( bytes, type );
+  }
+
+  public <T> void get( final String key, final AsyncCallback<T> callback )
+  {
+    final Class<?> asyncCallbackType = ReflectionUtil.getCallbackGenericType( callback );
+
+    injector.getThreadPoolService().getThreadPoolExecutor().execute( new Runnable()
+    {
+      @Override
+      public void run()
+      {
+        try
+        {
+          T result = (T) get( key, asyncCallbackType );
+          injector.getHandleCarrier().deliverMessage( new AsyncMessage<>( result, callback ) );
+        }
+        catch( BackendlessException e )
+        {
+          injector.getHandleCarrier().deliverMessage( new AsyncMessage<>( new BackendlessFault( e ), callback ) );
+        }
+        catch( Exception e )
+        {
+          injector.getHandleCarrier().deliverMessage( new AsyncMessage<>( new BackendlessFault( e ), callback ) );
+        }
+      }
+    } );
+  }
+
+  public Boolean contains( String key )
+  {
+    return Invoker.invokeSync( CACHE_SERVER_ALIAS, "containsKey", new Object[] { key }, getChainedResponder() );
+  }
+
+  public void contains( String key, AsyncCallback<Boolean> callback )
+  {
+    Invoker.invokeAsync( CACHE_SERVER_ALIAS, "containsKey", new Object[] { key }, callback );
+  }
+
+  public void expireIn( String key, int seconds )
+  {
+    Invoker.invokeSync( CACHE_SERVER_ALIAS, "expireIn", new Object[] { key, seconds }, getChainedResponder() );
+  }
+
+  public void expireIn( String key, int seconds, AsyncCallback<Object> callback )
+  {
+    Invoker.invokeAsync( CACHE_SERVER_ALIAS, "expireIn", new Object[] { key, seconds }, callback );
+  }
+
+  public void expireAt( String key, Date date )
+  {
+    expireAt( key, date.getTime() );
+  }
+
+  public void expireAt( String key, long timestamp )
+  {
+    Invoker.invokeSync( CACHE_SERVER_ALIAS, "expireAt", new Object[] { key, timestamp }, getChainedResponder() );
+  }
+
+  public void expireAt( String key, Date date, AsyncCallback<Object> callback )
+  {
+    expireAt( key, date.getTime(), callback );
+  }
+
+  public void expireAt( String key, long timestamp, AsyncCallback<Object> callback )
+  {
+    Invoker.invokeAsync( CACHE_SERVER_ALIAS, "expireAt", new Object[] { key, timestamp }, callback );
+  }
+
+  public void delete( String key )
+  {
+    Invoker.invokeSync( CACHE_SERVER_ALIAS, "delete", new Object[] { key }, getChainedResponder() );
+  }
+
+  public void delete( final String key, final AsyncCallback<Object> callback )
+  {
+    Invoker.invokeAsync( CACHE_SERVER_ALIAS, "delete", new Object[] { key }, callback );
+  }
+
+  private static <T> IChainedResponder getChainedResponder()
+  {
+    return new AdaptingResponder<T>();
+  }
+
+  private static Object deserialize( byte[] bytes, Type type )
+  {
+    Object object;
+    try
+    {
+      object = weborb.util.io.Serializer.fromBytes( bytes, ISerializer.AMF3, true );
+
+      if( object instanceof IAdaptingType )
+        return type == null ? ((IAdaptingType) object).defaultAdapt() : ((IAdaptingType) object).adapt( type );
+    }
+    catch( Exception e )
+    {
+      throw new BackendlessException( e );
+    }
+
+    return object;
+  }
+
+  private static byte[] serialize( Object object )
+  {
+    byte[] bytes;
+    try
+    {
+      bytes = weborb.util.io.Serializer.toBytes( object, ISerializer.AMF3 );
+    }
+    catch( Exception e )
+    {
+      throw new BackendlessException( e );
+    }
+    return bytes;
+  }
+}
+

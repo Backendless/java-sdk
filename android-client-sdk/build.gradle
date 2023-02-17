@@ -1,0 +1,75 @@
+plugins {
+  id 'com.android.library' version '7.4.0-beta02'
+}
+
+group 'com.backendless'
+archivesBaseName = 'android-client-sdk'
+version '8.0.0'
+
+dependencies {
+  implementation project( ':java-sdk-common' )
+
+  implementation( group: "com.backendless", name: "commons", version: property( 'version-com.backendless-commons' ) ) {
+    exclude group: 'com.fasterxml.jackson.core'
+  }
+  implementation( group: "weborb", name: "weborbclient", version: property( 'version-weborb-weborbclient' ) )
+
+  compileOnly( "io.socket:socket.io-client:${property( 'version-io.socket-client' )}" ) {
+//       excluding org.json which is provided by Android
+    exclude group: 'org.json', module: 'json'
+  }
+
+  compileOnly( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
+  annotationProcessor( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
+
+  testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version-org.junit.jupiter' )}" )
+  testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version-org.junit.jupiter' )}" )
+
+  compileOnly 'com.android.support:support-compat:28.0.0'
+  compileOnly 'com.google.firebase:firebase-messaging:23.1.1'
+  compileOnly 'com.google.firebase:firebase-iid:21.1.0'
+
+//  implementation 'com.google.android.material:material:1.4.0'
+//  testImplementation 'junit:junit:4.13.2'
+//  compileOnly 'androidx.appcompat:appcompat:1.4.1'
+//  androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+//  androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+android {
+  namespace 'com.backendless'
+  compileSdk 33
+  buildToolsVersion "33.0.2"
+  defaultConfig {
+    minSdk 27
+    targetSdk 33
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+  }
+
+  lint {
+    abortOnError false
+//    baseline = file( project.buildDir.toPath(  ).resolve( "lint-baseline.xml") )
+    baseline = file( "lint-baseline.xml" )
+  }
+
+  buildTypes {
+    release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+/*
+test {
+  useJUnitPlatform()
+}
+*/

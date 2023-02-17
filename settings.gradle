@@ -1,0 +1,58 @@
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    mavenLocal()
+    mavenCentral()
+    google()
+  }
+}
+
+Properties mvncentralRepoCreds = new Properties()
+gradle.ext.mvncentralRepoCreds = mvncentralRepoCreds
+
+def getMavenSettingsCredentials = {
+  String userHome = System.getProperty( "user.home" );
+  File mavenSettings = new File( userHome, ".m2/settings.xml" )
+  def xmlSlurper = new XmlSlurper()
+  def output = xmlSlurper.parse( mavenSettings )
+  def creds = new HashMap<String, String>()
+  creds.put( "username", "dummy" )
+  creds.put( "password", "dummy" )
+  for( entry in output.servers."server" )
+  {
+    if( entry."id".text() == "backendless_private" )
+    {
+      creds.put( "username", entry.username.text() )
+      creds.put( "password", entry.password.text() )
+    }
+  }
+  return creds
+}
+
+def backendlessRepoCreds = getMavenSettingsCredentials()
+gradle.ext.backendlessRepoCreds = backendlessRepoCreds
+
+dependencyResolutionManagement {
+  repositoriesMode.set( RepositoriesMode.FAIL_ON_PROJECT_REPOS )
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    google()
+    maven {
+      name 'BackendlessPublic'
+      url 'https://maven.backendless.com/repository/backendless_public/'
+      credentials {
+        username backendlessRepoCreds.username
+        password backendlessRepoCreds.password
+      }
+      authentication {
+        basic( BasicAuthentication )
+      }
+    }
+  }
+}
+
+rootProject.name = 'backendless-java-sdk'
+include 'java-sdk-common'
+include 'android-client-sdk'
+include 'java-client-sdk'
