@@ -38,4 +38,48 @@ allprojects {
       options.addStringOption( 'Xdoclint:none', '-quiet' )
     }
   }
+
+  signing {
+    sign configurations.archives
+  }
+
+  publishing {
+    repositories {
+      maven {
+        name 'BackendlessPublic'
+        url 'https://maven.backendless.com/repository/backendless_public/'
+        credentials {
+          username gradle.ext.backendlessRepoCreds.username
+          password gradle.ext.backendlessRepoCreds.password
+        }
+        authentication {
+          basic( BasicAuthentication )
+        }
+      }
+
+      maven {
+        name = 'MavenCentral'
+        url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+        credentials {
+          username gradle.ext.mvncentralRepoCreds."user.name"
+          password gradle.ext.mvncentralRepoCreds."user.password"
+        }
+        authentication {
+          basic( BasicAuthentication )
+        }
+      }
+
+      maven {
+        name = 'MavenCentralSnapshot'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+        credentials {
+          username gradle.ext.mvncentralRepoCreds."user.name"
+          password gradle.ext.mvncentralRepoCreds."user.password"
+        }
+        authentication {
+          basic( BasicAuthentication )
+        }
+      }
+    }
+  }
 }

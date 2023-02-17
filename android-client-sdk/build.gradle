@@ -66,6 +66,15 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
+  publishing {
+    multipleVariants ( 'all' ) {
+      includeBuildTypeValues('release')
+      //allVariants()
+      withSourcesJar()
+      withJavadocJar()
+    }
+  }
 }
 
 /*
@@ -73,3 +82,58 @@ test {
   useJUnitPlatform()
 }
 */
+
+
+publishing {
+  publications {
+    mavenJava( MavenPublication ) {
+      //from components.all
+      afterEvaluate {
+        from components.all
+      }
+
+      pom {
+        // optionally
+        /*
+        groupId = 'com.backendless'
+        artifactId = 'backendless'
+        version = '8.0.0'
+        packaging = 'jar'
+        */
+
+        name = 'Android-Client-SDK for Backendless'
+        description = 'Provides access to Backendless API'
+        url = 'https://backendless.com'
+
+        // optionally props
+        /*
+        properties = [
+                myProp: "value",
+                "prop.with.dots": "anotherValue"
+        ]
+        */
+
+        scm {
+          connection = 'scm:git:https://github.com/Backendless/java-sdk.git'
+          developerConnection = 'scm:git:https://github.com/Backendless/java-sdk.git'
+          url = 'https://github.com/Backendless/java-sdk.git'
+        }
+
+        licenses {
+          license {
+            name = 'The MIT License (MIT)'
+            url = 'https://opensource.org/licenses/MIT'
+          }
+        }
+
+        developers {
+          developer {
+            id = 'backendless'
+            name = 'backendless'
+            email = 'info@backednless.com'
+          }
+        }
+      }
+    }
+  }
+}
