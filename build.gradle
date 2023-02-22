@@ -39,3 +39,10 @@ allprojects {
     }
   }
 }
+
+tasks.register( 'copyJarToOut' ) {
+}
+
+clean {
+  delete( "$projectDir.path/out" )
+}
