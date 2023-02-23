@@ -4,36 +4,47 @@ plugins {
 
 group 'com.backendless'
 archivesBaseName = 'android-client-sdk'
-version '8.0.0'
+version property('version.android-client-sdk')
 
 dependencies {
   implementation project( ':java-sdk-common' )
 
-  implementation( group: "com.backendless", name: "commons", version: property( 'version-com.backendless-commons' ) ) {
+  implementation( group: "com.backendless", name: "commons", version: property( 'version.backendless-commons' ) ) {
     exclude group: 'com.fasterxml.jackson.core'
   }
-  implementation( group: "weborb", name: "weborbclient", version: property( 'version-weborb-weborbclient' ) )
+  implementation( group: "weborb", name: "weborbclient", version: property( 'version.weborbclient' ) )
 
-  compileOnly( "io.socket:socket.io-client:${property( 'version-io.socket-client' )}" ) {
+  compileOnly( "io.socket:socket.io-client:${property( 'version.io-socket-client' )}" ) {
 //       excluding org.json which is provided by Android
     exclude group: 'org.json', module: 'json'
   }
 
-  compileOnly( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
-  annotationProcessor( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
+  compileOnly( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
+  annotationProcessor( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
 
-  testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version-org.junit.jupiter' )}" )
-  testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version-org.junit.jupiter' )}" )
+  testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version.junit-jupiter' )}" )
+  testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version.junit-jupiter' )}" )
 
+  //compileOnly 'androidx.appcompat:appcompat:1.4.1'
   compileOnly 'com.android.support:support-compat:28.0.0'
   compileOnly 'com.google.firebase:firebase-messaging:23.1.1'
   compileOnly 'com.google.firebase:firebase-iid:21.1.0'
 
-//  implementation 'com.google.android.material:material:1.4.0'
-//  testImplementation 'junit:junit:4.13.2'
-//  compileOnly 'androidx.appcompat:appcompat:1.4.1'
-//  androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-//  androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+  testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version.junit-jupiter' )}" )
+  testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version.junit-jupiter' )}" )
+
+  // Required -- JUnit 4 framework
+  //testImplementation "junit:junit:$jUnitVersion" // 4.13.2
+  // Optional -- Robolectric environment
+  //testImplementation "androidx.test:core:$androidXTestVersion"
+  //androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+  //androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+  // Optional -- Mockito framework
+  //testImplementation "org.mockito:mockito-core:$mockitoVersion"
+  // Optional -- mockito-kotlin
+  //testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
+  // Optional -- Mockk framework
+  //testImplementation "io.mockk:mockk:$mockkVersion"
 }
 
 android {
@@ -72,10 +83,8 @@ android {
       outputFileName = "${archivesBaseName}-${defaultConfig.versionName}-${variant.name}.aar"
     }
   }
-}
 
-/*
-test {
-  useJUnitPlatform()
+  testOptions {
+    unitTests.returnDefaultValues = true
+  }
 }
-*/
