@@ -16,15 +16,15 @@ public abstract class BackendlessPrefs
   static final String PREFS_NAME = "BackendlessPrefs";
 
   protected AuthKeys authKeys;
-  protected HashMap<String, String> headers;
+  protected final HashMap<String, String> headers = new HashMap<>();
   protected String url;
   protected String customDomain;
   protected String deviceId;
   protected String os;
   protected String osVersion;
   protected String pushTemplatesAsJson;
-  protected HashMap<String, AndroidPushTemplate> pushNotificationTemplates = new HashMap<>();
-  protected AtomicReference<Integer> notificationIdGeneratorState = new AtomicReference<>();
+  protected final HashMap<String, AndroidPushTemplate> pushNotificationTemplates = new HashMap<>();
+  protected final AtomicReference<Integer> notificationIdGeneratorState = new AtomicReference<>();
 
   BackendlessPrefs()
   {
@@ -57,7 +57,7 @@ public abstract class BackendlessPrefs
 
   public synchronized void cleanHeaders()
   {
-    headers = null;
+    headers.clear();
   }
 
   public String getApplicationId()
@@ -68,7 +68,8 @@ public abstract class BackendlessPrefs
 
   public String getApiKey()
   {
-    return getAuthKeys().getApiKey();
+    final AuthKeys authKeys = getAuthKeys();
+    return authKeys == null ? null : authKeys.getApiKey();
   }
 
   public synchronized HashMap<String, String> getHeaders()

@@ -108,6 +108,12 @@ final class BackendlessInternal
       }
     } );
 
+    injector.setEventHandlerFactory( EventHandlerFactory.getInstance() );
+    injector.setChannelFactory( ChannelFactory.getInstance() );
+    injector.setSharedObjectFactory( SharedObjectFactory.getInstance() );
+    injector.setThreadPoolService( ThreadPoolService.getInstance() );
+    injector.setRtClient( RTClientFactory.getInstance().get() );
+
     injector.setFootprintsManager( com.backendless.FootprintsManager.getInstance() );
     injector.setUserService( com.backendless.UserService.getInstance() );
     injector.setPersistence( com.backendless.Persistence.getInstance() );
@@ -119,12 +125,6 @@ final class BackendlessInternal
     injector.setCustomService( com.backendless.CustomService.getInstance() );
     injector.setLogging( com.backendless.Logging.getInstance() );
     injector.setRtService( com.backendless.rt.RTServiceImpl.getInstance() );
-
-    injector.setEventHandlerFactory( EventHandlerFactory.getInstance() );
-    injector.setChannelFactory( ChannelFactory.getInstance() );
-    injector.setSharedObjectFactory( SharedObjectFactory.getInstance() );
-    injector.setThreadPoolService( ThreadPoolService.getInstance() );
-    injector.setRtClient( RTClientFactory.getInstance().get() );
 
     try
     {
