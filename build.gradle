@@ -15,6 +15,10 @@ plugins {
 }
 
 allprojects {
+  ext.'signing.keyId' = gradle.ext.mvncentralRepoCreds.'signing.keyId'
+  ext.'signing.password' = gradle.ext.mvncentralRepoCreds.'signing.password'
+  ext.'signing.secretKeyRingFile' = gradle.ext.mvncentralRepoCreds.'signing.secretKeyRingFile'
+
   apply plugin: 'signing'
   apply plugin: 'maven-publish'
 

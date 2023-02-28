@@ -9,11 +9,8 @@ pluginManagement {
 
 Properties mvncentralRepoCreds = new Properties()
 gradle.ext.mvncentralRepoCreds = mvncentralRepoCreds
-//var ossrhCreds = rootDir.toPath().resolve( "security.properties" )
-//mvncentralRepoCreds.load( Files.newBufferedReader( ossrhCreds ) )
-//ext.'signing.keyId' = 0
-//ext.'signing.password' = 0
-//ext.'signing.secretKeyRingFile' = 0
+var ossrhCreds = rootDir.toPath().resolve( "security.properties" )
+mvncentralRepoCreds.load( java.nio.file.Files.newBufferedReader( ossrhCreds ) )
 
 
 def getMavenSettingsCredentials = {
