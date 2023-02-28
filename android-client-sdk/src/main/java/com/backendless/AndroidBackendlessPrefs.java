@@ -15,6 +15,7 @@ import java.util.Map;
 public class AndroidBackendlessPrefs extends BackendlessPrefs
 {
   private SharedPreferences sharedPreferences;
+  private boolean initialized = false;
 
   AndroidBackendlessPrefs()
   {
@@ -65,19 +66,6 @@ public class AndroidBackendlessPrefs extends BackendlessPrefs
   {
     super.cleanHeaders();
     cleanHeadersFromPreferences();
-  }
-
-  @Override
-  public String getApplicationId()
-  {
-    final AuthKeys authKeys = getAuthKeys();
-    return authKeys == null ? null : authKeys.getApplicationId();
-  }
-
-  @Override
-  public String getApiKey()
-  {
-    return getAuthKeys().getApiKey();
   }
 
   @Override
@@ -133,8 +121,11 @@ public class AndroidBackendlessPrefs extends BackendlessPrefs
   @Override
   public synchronized HashMap<String, String> getHeaders()
   {
-    if( headers == null )
+    if( !initialized )
+    {
       restoreHeadersFromPreferences();
+      initialized = true;
+    }
 
     return headers;
   }

@@ -1,6 +1,8 @@
 .idea/
 .gradle
+out/
 android-client-sdk/build
+android-client-sdk/lint-baseline.xml
 java-client-sdk/build
 java-sdk-common/build
 local.properties

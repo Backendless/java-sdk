@@ -4,19 +4,19 @@ plugins {
 
 group 'com.backendless'
 archivesBaseName = 'java-sdk-common'
-version '8.0.0'
+version property('version.java-sdk-common')
 
 java {
   sourceCompatibility = JavaVersion.VERSION_1_8
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-task sourcesJar( type: Jar ) {
+tasks.register( 'sourcesJar', Jar ) {
   archiveClassifier.set( "sources" )
   from sourceSets.main.allSource
 }
 
-task javadocJar( type: Jar ) {
+tasks.register( 'javadocJar', Jar ) {
   archiveClassifier.set( "javadoc" )
   from javadoc
 }
@@ -26,21 +26,28 @@ artifacts {
 }
 
 dependencies {
-  implementation( group: "com.backendless", name: "commons", version: property( 'version-com.backendless-commons' ) ) {
+  implementation( group: "com.backendless", name: "commons", version: property( 'version.backendless-commons' ) ) {
     exclude group: 'com.fasterxml.jackson.core'
   }
-  implementation( group: "weborb", name: "weborbclient", version: property( 'version-weborb-weborbclient' ) )
+  implementation( group: "weborb", name: "weborbclient", version: property( 'version.weborbclient' ) )
 
-  compileOnly( "io.socket:socket.io-client:${property( 'version-io.socket-client' )}" ) {
+  compileOnly( "io.socket:socket.io-client:${property( 'version.io-socket-client' )}" ) {
 //       excluding org.json which is provided by Android
     exclude group: 'org.json', module: 'json'
   }
 
-  compileOnly( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
-  annotationProcessor( "org.projectlombok:lombok:${property( 'version-org.projectlombok' )}" )
+  compileOnly( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
+  annotationProcessor( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
 
-  testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version-org.junit.jupiter' )}" )
-  testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version-org.junit.jupiter' )}" )
+  testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version.junit-jupiter' )}" )
+  testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version.junit-jupiter' )}" )
+}
+
+println configurations.implementation
+
+parent.copyJarToOut.doLast {
+    copy( () -> from jar.archiveFile into "$parent.projectDir.path/out" )
+    copy( () -> from configurations.runtimeClasspath into "$parent.projectDir.path/out" )
 }
 
 test {

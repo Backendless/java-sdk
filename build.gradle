@@ -14,12 +14,6 @@ plugins {
 
 }
 
-ext.'version-com.backendless-commons' = '6.3.0'
-ext.'version-weborb-weborbclient' = '5.2.0.4'
-ext.'version-org.projectlombok' = '1.18.24'
-ext.'version-io.socket-client' = '1.0.0'
-ext.'version-org.junit.jupiter' = '5.8.1'
-
 allprojects {
   apply plugin: 'signing'
   apply plugin: 'maven-publish'
@@ -82,4 +76,14 @@ allprojects {
       }
     }
   }
+}
+
+tasks.register( 'copyJarToOut' ) {
+  doLast {
+    copy( () -> from "$projectDir.path/gradle.properties" into "$projectDir.path/out" )
+  }
+}
+
+clean {
+  delete( "$projectDir.path/out" )
 }
