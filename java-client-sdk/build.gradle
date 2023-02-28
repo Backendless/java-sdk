@@ -52,3 +52,53 @@ parent.copyJarToOut.doLast {
 test {
   useJUnitPlatform()
 }
+
+publishing {
+  publications {
+    mavenJava( MavenPublication ) {
+      from components.java
+      pom {
+        // optionally
+        /*
+        groupId = 'com.backendless'
+        artifactId = 'backendless'
+        version = '8.0.0'
+        packaging = 'jar'
+        */
+
+        name = 'Java-Client-SDK for Backendless'
+        description = 'Provides access to Backendless API'
+        url = 'https://backendless.com'
+
+        // optionally props
+        /*
+        properties = [
+                myProp: "value",
+                "prop.with.dots": "anotherValue"
+        ]
+        */
+
+        scm {
+          connection = 'scm:git:https://github.com/Backendless/java-sdk.git'
+          developerConnection = 'scm:git:https://github.com/Backendless/java-sdk.git'
+          url = 'https://github.com/Backendless/java-sdk.git'
+        }
+
+        licenses {
+          license {
+            name = 'The MIT License (MIT)'
+            url = 'https://opensource.org/licenses/MIT'
+          }
+        }
+
+        developers {
+          developer {
+            id = 'backendless'
+            name = 'backendless'
+            email = 'info@backednless.com'
+          }
+        }
+      }
+    }
+  }
+}
