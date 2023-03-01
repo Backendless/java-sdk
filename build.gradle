@@ -17,7 +17,7 @@ plugins {
 allprojects {
   ext.'signing.keyId' = gradle.ext.mvncentralRepoCreds.'signing.keyId'
   ext.'signing.password' = gradle.ext.mvncentralRepoCreds.'signing.password'
-  ext.'signing.secretKeyRingFile' = gradle.ext.mvncentralRepoCreds.'signing.secretKeyRingFile'
+  ext.'signing.secretKeyRingFile' = java.nio.file.Paths.get("$gradle.ext.userHome").resolve(gradle.ext.mvncentralRepoCreds.'signing.secretKeyRingFile').toAbsolutePath().toString()
 
   apply plugin: 'signing'
   apply plugin: 'maven-publish'

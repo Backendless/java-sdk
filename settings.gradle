@@ -9,7 +9,10 @@ pluginManagement {
 
 Properties mvncentralRepoCreds = new Properties()
 gradle.ext.mvncentralRepoCreds = mvncentralRepoCreds
-var ossrhCreds = rootDir.toPath().resolve( "security.properties" )
+gradle.ext.userHome = java.nio.file.Paths.get(System.getProperty( "user.home" ))
+var basePath = java.nio.file.Paths.get("$gradle.ext.userHome")
+//var basePath = rootDir.toPath(); // for local build
+var ossrhCreds = basePath.resolve( ".security.properties" )
 mvncentralRepoCreds.load( java.nio.file.Files.newBufferedReader( ossrhCreds ) )
 
 
