@@ -29,7 +29,7 @@ dependencies {
   implementation( group: "com.backendless", name: "commons", version: property( 'version.backendless-commons' ) ) {
     exclude group: 'com.fasterxml.jackson.core'
   }
-  implementation( group: "weborb", name: "weborbclient", version: property( 'version.weborbclient' ) )
+  implementation( group: "com.backendless", name: "weborbclient", version: property( 'version.weborbclient' ) )
 
   compileOnly( "io.socket:socket.io-client:${property( 'version.io-socket-client' )}" ) {
 //       excluding org.json which is provided by Android
