@@ -9,20 +9,12 @@ version property('version.java-client-sdk')
 java {
   sourceCompatibility = JavaVersion.VERSION_1_8
   targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.register( 'sourcesJar', Jar ) {
-  archiveClassifier.set( "sources" )
-  from sourceSets.main.allSource
-}
-
-tasks.register( 'javadocJar', Jar ) {
-  archiveClassifier.set( "javadoc" )
-  from javadoc
+  withSourcesJar()
+  withJavadocJar()
 }
 
 artifacts {
-  archives sourcesJar, javadocJar
+  archives jar, sourcesJar, javadocJar
 }
 
 dependencies {
