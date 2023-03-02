@@ -39,6 +39,7 @@ allprojects {
 
   signing {
     sign configurations.archives
+    sign publishing.publications
   }
 
   publishing {

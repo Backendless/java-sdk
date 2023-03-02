@@ -18,16 +18,10 @@ artifacts {
 }
 
 dependencies {
-  implementation( group: "com.backendless", name: "commons", version: property( 'version.backendless-commons' ) ) {
-    exclude group: 'com.fasterxml.jackson.core'
-  }
-  implementation( group: "com.backendless", name: "weborbclient", version: property( 'version.weborbclient' ) )
+  api( group: "com.backendless", name: "commons", version: property( 'version.backendless-commons' ) )
+  api( group: "com.backendless", name: "weborbclient", version: property( 'version.weborbclient' ) )
 
-  compileOnly( "io.socket:socket.io-client:${property( 'version.io-socket-client' )}" ) {
-//       excluding org.json which is provided by Android
-    exclude group: 'org.json', module: 'json'
-  }
-
+  compileOnly( "io.socket:socket.io-client:${property( 'version.io-socket-client' )}" )
   compileOnly( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
   annotationProcessor( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
 
@@ -57,8 +51,8 @@ publishing {
         groupId = 'com.backendless'
         artifactId = 'backendless'
         version = '8.0.0'
-        packaging = 'jar'
         */
+        packaging = 'jar'
 
         name = 'Java-SDK (common part) for Backendless'
         description = 'Provides access to Backendless API'

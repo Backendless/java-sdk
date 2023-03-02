@@ -7,18 +7,11 @@ archivesBaseName = 'android-client-sdk'
 version property('version.android-client-sdk')
 
 dependencies {
-  implementation project( ':java-sdk-common' )
+  api project( ':java-sdk-common' )
 
-  implementation( group: "com.backendless", name: "commons", version: property( 'version.backendless-commons' ) ) {
-    exclude group: 'com.fasterxml.jackson.core'
-  }
-  implementation( group: "com.backendless", name: "weborbclient", version: property( 'version.weborbclient' ) )
-
-  compileOnly( "io.socket:socket.io-client:${property( 'version.io-socket-client' )}" ) {
-//       excluding org.json which is provided by Android
-    exclude group: 'org.json', module: 'json'
-  }
-
+  compileOnly( group: "com.backendless", name: "commons", version: property( 'version.backendless-commons' ) )
+  compileOnly( group: "com.backendless", name: "weborbclient", version: property( 'version.weborbclient' ) )
+  compileOnly( "io.socket:socket.io-client:${property( 'version.io-socket-client' )}" )
   compileOnly( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
   annotationProcessor( "org.projectlombok:lombok:${property( 'version.projectlombok' )}" )
 
@@ -50,7 +43,7 @@ dependencies {
 android {
   namespace 'com.backendless'
   compileSdk 33
-  buildToolsVersion "33.0.2"
+  buildToolsVersion = "33.0.2"
   defaultConfig {
     minSdk 27
     targetSdk 33
@@ -99,7 +92,6 @@ android {
 }
 
 
-
 publishing {
   publications {
     mavenJava( MavenPublication ) {
@@ -114,8 +106,8 @@ publishing {
         groupId = 'com.backendless'
         artifactId = 'backendless'
         version = '8.0.0'
-        packaging = 'jar'
         */
+        packaging = 'aar'
 
         name = 'Android-Client-SDK for Backendless'
         description = 'Provides access to Backendless API'
