@@ -73,7 +73,7 @@ android {
 
   libraryVariants.all { variant ->
     variant.outputs.all {
-      outputFileName = "${archivesBaseName}-${defaultConfig.versionName}-${variant.name}.jar"
+      outputFileName = "${archivesBaseName}-${defaultConfig.versionName}-${variant.name}.aar"
     }
   }
 
@@ -107,7 +107,7 @@ publishing {
         artifactId = 'backendless'
         version = '8.0.0'
         */
-        packaging = 'jar'
+        packaging = 'aar'
 
         name = 'Android-Client-SDK for Backendless'
         description = 'Provides access to Backendless API'
