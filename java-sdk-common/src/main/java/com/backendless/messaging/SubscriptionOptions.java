@@ -18,7 +18,8 @@
 
 package com.backendless.messaging;
 
-import weborb.v3types.GUID;
+import java.util.UUID;
+
 
 /**
  * The class is deprecated, it is left to maintain backward compatibility. The class will be deleted in a future release
@@ -32,7 +33,7 @@ public class SubscriptionOptions
 
   public SubscriptionOptions()
   {
-    this.subscriberId = new GUID().toString();
+    this.subscriberId = UUID.randomUUID().toString();
   }
 
   public SubscriptionOptions( String subscriberId )

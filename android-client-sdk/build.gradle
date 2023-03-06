@@ -43,7 +43,7 @@ dependencies {
 android {
   namespace 'com.backendless'
   compileSdk 33
-  buildToolsVersion = "33.0.2"
+  buildToolsVersion = '34.0.0 rc1'
   defaultConfig {
     minSdk 27
     targetSdk 33
@@ -73,7 +73,7 @@ android {
 
   libraryVariants.all { variant ->
     variant.outputs.all {
-      outputFileName = "${archivesBaseName}-${defaultConfig.versionName}-${variant.name}.aar"
+      outputFileName = "${archivesBaseName}-${defaultConfig.versionName}-${variant.name}.jar"
     }
   }
 
@@ -107,7 +107,7 @@ publishing {
         artifactId = 'backendless'
         version = '8.0.0'
         */
-        packaging = 'aar'
+        packaging = 'jar'
 
         name = 'Android-Client-SDK for Backendless'
         description = 'Provides access to Backendless API'

@@ -1,9 +1,9 @@
 package com.backendless.rt;
 
-import weborb.v3types.GUID;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
 
 public abstract class AbstractRequest implements RTRequest
 {
@@ -13,7 +13,7 @@ public abstract class AbstractRequest implements RTRequest
 
   protected AbstractRequest( RTCallback callback )
   {
-    this.id = new GUID().toString();
+    this.id = UUID.randomUUID().toString();
     this.callback = callback;
   }
 

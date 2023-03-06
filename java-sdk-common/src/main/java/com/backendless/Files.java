@@ -18,7 +18,6 @@
 
 package com.backendless;
 
-
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.async.callback.UploadCallback;
 import com.backendless.core.responder.AdaptingResponder;
@@ -35,7 +34,6 @@ import com.backendless.files.security.FileRolePermission;
 import com.backendless.files.security.FileUserPermission;
 import com.backendless.utils.StringUtils;
 import weborb.types.Types;
-import weborb.v3types.GUID;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +49,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -183,7 +182,7 @@ public final class Files
   {
     HttpURLConnection connection = null;
     String CRLF = "\r\n";
-    String boundary = (new GUID()).toString();
+    final String boundary = UUID.randomUUID().toString();
 
     try
     {
