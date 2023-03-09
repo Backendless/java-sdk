@@ -54,3 +54,31 @@ dependencies {
   compile "com.backendless:android-client-sdk:VERSION"
 }
 ```
+
+
+Optional dependencies
+========================================
+
+**(1)** SocketIO support.  
+```xml
+<!-- https://mvnrepository.com/artifact/io.socket/socket.io-client -->
+<dependency>
+    <groupId>io.socket</groupId>
+    <artifactId>socket.io-client</artifactId>
+    <version>2.1.0</version>
+</dependency>
+```
+or
+```groovy
+  api 'io.socket:socket.io-client:2.1.0'
+```
+
+
+**(2)**  Android Messaging support.
+```groovy
+dependencies {
+  api 'androidx.appcompat:appcompat:1.6.1'
+  api 'com.google.firebase:firebase-messaging:23.1.2'
+  api 'com.google.firebase:firebase-iid:21.1.0'
+}
+```

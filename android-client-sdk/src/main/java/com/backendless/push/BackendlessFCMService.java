@@ -1,19 +1,22 @@
 package com.backendless.push;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import com.backendless.BackendlessInjector;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -136,7 +139,7 @@ public class BackendlessFCMService extends FirebaseMessagingService
     PushTemplateHelper.showNotification( context, notification, androidPushTemplate.getName(), notificationId );
   }
 
-  private void fallBackMode( Context context, String message, String contentTitle, String summarySubText, String soundResource,
+  private void fallBackMode( final Context context, String message, String contentTitle, String summarySubText, String soundResource,
                              Bundle bundle, final int notificationId )
   {
     final String channelName = "Fallback";
@@ -180,6 +183,19 @@ public class BackendlessFCMService extends FirebaseMessagingService
       @Override
       public void run()
       {
+        if( ActivityCompat.checkSelfPermission( context, Manifest.permission.POST_NOTIFICATIONS ) != PackageManager.PERMISSION_GRANTED )
+        {
+          Log.e( TAG, "Application has not permission: android.permission.POST_NOTIFICATIONS." );
+
+          // TODO: Consider calling
+          //    ActivityCompat#requestPermissions
+          // here to request the missing permissions, and then overriding
+          //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+          //                                          int[] grantResults)
+          // to handle the case where the user grants the permission. See the documentation
+          // for ActivityCompat#requestPermissions for more details.
+          return;
+        }
         notificationManagerCompat.notify( channelName, notificationId, notificationBuilder.build() );
       }
     } );

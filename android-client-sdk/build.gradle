@@ -18,10 +18,9 @@ dependencies {
   testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version.junit-jupiter' )}" )
   testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version.junit-jupiter' )}" )
 
-  //compileOnly 'androidx.appcompat:appcompat:1.4.1'
-  compileOnly 'com.android.support:support-compat:28.0.0'
-  compileOnly 'com.google.firebase:firebase-messaging:23.1.1'
-  compileOnly 'com.google.firebase:firebase-iid:21.1.0'
+  api 'androidx.appcompat:appcompat:1.6.1'
+  api 'com.google.firebase:firebase-messaging:23.1.2'
+  api 'com.google.firebase:firebase-iid:21.1.0'
 
   testImplementation( "org.junit.jupiter:junit-jupiter-api:${property( 'version.junit-jupiter' )}" )
   testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:${property( 'version.junit-jupiter' )}" )
