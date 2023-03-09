@@ -16,6 +16,9 @@ Welcome to Backendless! In this document you will find the instructions for gett
 Setting up your app
 ========================================
 
+> Minimum supported version: **`Android 8.1 Oreo (API 27)`**
+
+
 Maven Integration
 --------------------------------------------------------------------------------
 The backendless client library for Android and Java is available through the central [Maven](http://mvnrepository.com/artifact/com.backendless/backendless) repository. Since the version of Backendless deployed to maven changes frequently, make sure to lookup the latest version number from Maven Central. To add a dependency for the  library, add the following to pom.xml (make sure to replace "VERSION" with a specific version number):  
