@@ -131,7 +131,7 @@ abstract class SocketIOConnectionManager
           logger.info( "Got met res" );
           invocationResult( args );
         }
-      } ).on( Socket.EVENT_ERROR, new Emitter.Listener()
+      } ).on( "error", new Emitter.Listener()
       {
         @Override
         public void call( Object... args )
