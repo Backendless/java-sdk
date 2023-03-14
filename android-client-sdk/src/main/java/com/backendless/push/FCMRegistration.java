@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class FCMRegistration
 {
-  private static final BackendlessPrefs prefs = BackendlessInjector.getInstance().getPrefs();
+  private static final BackendlessInjector injector = BackendlessInjector.getInstance();
   private static final String DEFAULT_TOPIC = "default-topic";
   private static final String TAG = FCMRegistration.class.getSimpleName();
   private static boolean fcmConfig = false;
@@ -130,9 +130,9 @@ public class FCMRegistration
       @Override
       public void handleFault( BackendlessFault fault )
       {
-        Log.d( TAG, "Could not unregister device on Backendless server: " + fault.toString() );
+        Log.d( TAG, "Could not unregister device on Backendless server: " + fault );
         if( callback != null )
-          callback.handleFault( new BackendlessFault( "Could not unregister device on Backendless server: " + fault.toString() ) );
+          callback.handleFault( new BackendlessFault( "Could not unregister device on Backendless server: " + fault ) );
       }
     } );
   }
@@ -182,7 +182,7 @@ public class FCMRegistration
 
     try
     {
-      prefs.setPushNotificationTemplates( templates );
+      injector.getPrefs().setPushNotificationTemplates( templates );
     }
     catch( Exception e )
     {

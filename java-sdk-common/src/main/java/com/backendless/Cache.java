@@ -35,6 +35,10 @@ import java.lang.reflect.Type;
 import java.util.Date;
 
 
+/**
+ * Use Hive.
+ */
+@Deprecated
 public class Cache
 {
   private final static String CACHE_SERVER_ALIAS = "com.backendless.services.redis.CacheService";

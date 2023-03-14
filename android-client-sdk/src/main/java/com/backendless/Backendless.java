@@ -39,7 +39,8 @@ public final class Backendless
     BackendlessInternal.init();
     injector.setMessaging( com.backendless.AndroidMessaging.getInstance() );
 
-    Invoker.getWebOrbClient().setHostnameVerifier( new org.apache.http.conn.ssl.StrictHostnameVerifier() );
+    //Invoker.getWebOrbClient().setHostnameVerifier( new org.apache.http.conn.ssl.StrictHostnameVerifier() );
+    // TODO: the new one is okhttp3.internal.tls.OkHostnameVerifier.INSTANCE
 
     return true;
   }
@@ -48,13 +49,14 @@ public final class Backendless
 
   public static final FootprintsManager FootprintsManager = BackendlessInjector.getInstance().getFootprintsManager();
   public static final UserService UserService = BackendlessInjector.getInstance().getUserService();
-  public static final Persistence Persistence = BackendlessInjector.getInstance().getPersistence();
   public static final Persistence Data = BackendlessInjector.getInstance().getPersistence();
   public static final Messaging Messaging = BackendlessInjector.getInstance().getMessaging();
   public static final Files Files = BackendlessInjector.getInstance().getFiles();
   public static final Commerce Commerce = BackendlessInjector.getInstance().getCommerce();
   public static final Events Events = BackendlessInjector.getInstance().getEvents();
+  @Deprecated
   public static final Cache Cache = BackendlessInjector.getInstance().getCache();
+  @Deprecated
   public static final Counters Counters = BackendlessInjector.getInstance().getCounters();
   public static final CustomService CustomService = BackendlessInjector.getInstance().getCustomService();
   public static final Logging Logging = BackendlessInjector.getInstance().getLogging();

@@ -20,6 +20,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
 import com.backendless.BackendlessInjector;
+import com.backendless.exceptions.BackendlessException;
 import com.backendless.messaging.Action;
 import com.backendless.messaging.AndroidPushTemplate;
 import com.backendless.messaging.PublishOptions;
@@ -34,7 +35,15 @@ import java.util.Map;
 
 public class PushTemplateHelper
 {
-  private static BackendlessInjector injector = BackendlessInjector.getInstance();
+  private static final BackendlessInjector injector = BackendlessInjector.getInstance();
+
+  public static final String IMMEDIATE_MESSAGE = "ImmediateMessage";
+  public static final String ACTION_ON_TAP = "ActionOnTap";
+
+  public static Map<String, AndroidPushTemplate> activePushTemplates()
+  {
+    return injector.getPrefs().getPushNotificationTemplates();
+  }
 
   static Bundle prepareMessageBundle( final Bundle rawMessageBundle, final AndroidPushTemplate template, final int notificationId )
   {
@@ -62,11 +71,22 @@ public class PushTemplateHelper
     return newBundle;
   }
 
-  static Notification convertFromTemplate( final Context context, final AndroidPushTemplate template, final Bundle newBundle,
-                                           int notificationId )
+  static AndroidPushTemplate convertFromJson( final String templateAsJson )
+  {
+    try
+    {
+      AndroidPushTemplate androidPushTemplate = (AndroidPushTemplate) weborb.util.io.Serializer.fromBytes( templateAsJson.getBytes(), weborb.util.io.Serializer.JSON, false );
+      return androidPushTemplate;
+    }
+    catch( Throwable throwable )
+    {
+      throw new BackendlessException( "Error during deserializing Android Push Template", throwable );
+    }
+  }
+
+  static Notification convertFromTemplate( final Context context, final AndroidPushTemplate template, final Bundle newBundle, int notificationId )
   {
     Context appContext = context.getApplicationContext();
-    // Notification channel ID is ignored for Android 7.1.1 (API level 25) and lower.
 
     String messageText = newBundle.getString( PublishOptions.MESSAGE_TAG );
 
@@ -189,13 +209,13 @@ public class PushTemplateHelper
       notificationIntent = appContext.getPackageManager().getLaunchIntentForPackage( appContext.getPackageName() );
     else
     {
-      notificationIntent = new Intent( "ActionOnTap" );
+      notificationIntent = new Intent( ACTION_ON_TAP );
       notificationIntent.setClassName( appContext, template.getActionOnTap() );
     }
 
     notificationIntent.putExtras( newBundle );
     notificationIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
-    PendingIntent contentIntent = PendingIntent.getActivity( appContext, notificationId * 3, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+    PendingIntent contentIntent = PendingIntent.getActivity( appContext, notificationId * 3, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE );
 
     // user should use messageId and tag(templateName) to cancel notification.
     notificationBuilder.setContentIntent( contentIntent );
@@ -239,7 +259,7 @@ public class PushTemplateHelper
 
       // user should use messageId and tag(templateName) to cancel notification.
 
-      PendingIntent pendingIntent = PendingIntent.getActivity( appContext, notificationId * 3 + i++, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+      PendingIntent pendingIntent = PendingIntent.getActivity( appContext, notificationId * 3 + i++, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE );
 
       NotificationCompat.Action.Builder actionBuilder = new NotificationCompat.Action.Builder( 0, a.getTitle(), pendingIntent );
 
@@ -258,7 +278,7 @@ public class PushTemplateHelper
   {
     NotificationManager notificationManager = (NotificationManager) context.getSystemService( Context.NOTIFICATION_SERVICE );
     List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
-    final String channelNotificationPrefix = getChannelNotificationPrefix();
+    final String channelNotificationPrefix = injector.getPrefs().getApplicationIdOrDomain();
     for( NotificationChannel notifChann : notificationChannels )
     {
       String notifChannId = notifChann.getId();
@@ -272,12 +292,7 @@ public class PushTemplateHelper
 
   static String getChannelId( String channelName )
   {
-    return getChannelNotificationPrefix() + ":" + channelName;
-  }
-
-  static private String getChannelNotificationPrefix()
-  {
-    return injector.getPrefs().getApplicationIdOrDomain();
+    return injector.getPrefs().getApplicationIdOrDomain() + ":" + channelName;
   }
 
   static public NotificationChannel getNotificationChannel( final Context context, final String templateName )

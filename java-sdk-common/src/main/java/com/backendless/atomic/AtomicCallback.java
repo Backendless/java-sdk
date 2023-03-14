@@ -23,6 +23,12 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.utils.ReflectionUtil;
 
+
+/**
+ * Use Hive.
+ * @param <T>
+ */
+@Deprecated
 public class AtomicCallback<T> implements AsyncCallback<Object>
 {
   private final AsyncCallback<T> realCallback;

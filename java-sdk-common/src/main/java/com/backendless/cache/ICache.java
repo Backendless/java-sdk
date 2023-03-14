@@ -22,6 +22,11 @@ import com.backendless.async.callback.AsyncCallback;
 
 import java.util.Date;
 
+/**
+ * Use Hive.
+ * @param <T>
+ */
+@Deprecated
 public interface ICache<T>
 {
   void put( T value, AsyncCallback<Object> callback );

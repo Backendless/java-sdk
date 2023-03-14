@@ -30,8 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BackendlessFCMService extends FirebaseMessagingService
 {
-  private final BackendlessInjector injector = BackendlessInjector.getInstance();
-  private static final String IMMEDIATE_MESSAGE = "ImmediateMessage";
+  private static final BackendlessInjector injector = BackendlessInjector.getInstance();
+
   private static final String TAG = BackendlessFCMService.class.getSimpleName();
   private static AtomicInteger notificationIdGenerator;
 
@@ -90,8 +90,8 @@ public class BackendlessFCMService extends FirebaseMessagingService
       String immediatePush = intent.getStringExtra( PublishOptions.ANDROID_IMMEDIATE_PUSH );
       if( immediatePush != null )
       {
-        androidPushTemplate = (AndroidPushTemplate) weborb.util.io.Serializer.fromBytes( immediatePush.getBytes(), weborb.util.io.Serializer.JSON, false );
-        androidPushTemplate.setName( BackendlessFCMService.IMMEDIATE_MESSAGE );
+        androidPushTemplate = PushTemplateHelper.convertFromJson( immediatePush );
+        androidPushTemplate.setName( PushTemplateHelper.IMMEDIATE_MESSAGE );
       }
 
       final String templateName = intent.getStringExtra( PublishOptions.TEMPLATE_NAME );
@@ -121,8 +121,7 @@ public class BackendlessFCMService extends FirebaseMessagingService
     }
   }
 
-  private void handleMessageWithTemplate( final Context context, Intent intent, AndroidPushTemplate androidPushTemplate,
-                                          final int notificationId )
+  private void handleMessageWithTemplate( final Context context, Intent intent, AndroidPushTemplate androidPushTemplate, final int notificationId )
   {
     Bundle newBundle = PushTemplateHelper.prepareMessageBundle( intent.getExtras(), androidPushTemplate, notificationId );
 
