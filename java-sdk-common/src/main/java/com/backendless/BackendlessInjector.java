@@ -28,7 +28,9 @@ public class BackendlessInjector
   private Files files;
   private Commerce commerce;
   private Events events;
+  @Deprecated
   private Cache cache;
+  @Deprecated
   private Counters counters;
   private CustomService customService;
   private Logging logging;
@@ -183,21 +185,25 @@ public class BackendlessInjector
     this.events = events;
   }
 
+  @Deprecated
   public com.backendless.Cache getCache()
   {
     return cache;
   }
 
+  @Deprecated
   void setCache( com.backendless.Cache cache )
   {
     this.cache = cache;
   }
 
+  @Deprecated
   public com.backendless.Counters getCounters()
   {
     return counters;
   }
 
+  @Deprecated
   void setCounters( com.backendless.Counters counters )
   {
     this.counters = counters;

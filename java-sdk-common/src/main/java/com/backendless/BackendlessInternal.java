@@ -79,6 +79,8 @@ final class BackendlessInternal
       prefs.setUrl( BackendlessInternal.url );
 
     ORBConfig.getORBConfig();
+    Invoker.reinitialize();
+
     Log.removeLogger( ILoggingConstants.DEFAULT_LOGGER );
     JSONUtil.setJsonConverter( new JSONConverterWeborbImpl() );
 
@@ -297,7 +299,7 @@ final class BackendlessInternal
     return prefs.getApiKey();
   }
 
-  protected static Map<String, String> getHeaders()
+  static Map<String, String> getHeaders()
   {
     if( prefs == null )
       throw new IllegalStateException( ExceptionMessage.NOT_INITIALIZED );

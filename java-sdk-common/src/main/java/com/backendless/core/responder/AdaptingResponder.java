@@ -31,7 +31,11 @@ import weborb.reader.StringType;
 import weborb.types.IAdaptingType;
 import weborb.v3types.ErrMessage;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class AdaptingResponder<E> implements IRawResponder
 {
@@ -119,11 +123,20 @@ public class AdaptingResponder<E> implements IRawResponder
     final StringType faultMessage = (StringType) bodyHolder.getProperties().get( "faultString" );
     final StringType faultDetail = (StringType) bodyHolder.getProperties().get( "faultDetail" );
     final StringType faultCode = (StringType) bodyHolder.getProperties().get( "faultCode" );
-    final AnonymousObject extendedData = (AnonymousObject) bodyHolder.getProperties().get( "extendedData" );
+
+    final Map<String, Object> extendedData = new HashMap<>();
+    try
+    {
+      extendedData.putAll( (Map<String, Object>) ((AnonymousObject) bodyHolder.getProperties().get( "extendedData" )).defaultAdapt() );
+    }
+    catch( Exception e )
+    {
+      Logger.getLogger( AdaptingResponder.class.getName() ).log( Level.WARNING, "WebOrb adapting error. {0}" + e.getMessage() );
+    }
 
     return new BackendlessFault( new Fault( (String) faultMessage.defaultAdapt(),
                                             (String) faultDetail.defaultAdapt(),
                                             (String) faultCode.defaultAdapt() ),
-                                 (Map<String, Object>) extendedData.defaultAdapt() );
+                                 extendedData );
   }
 }

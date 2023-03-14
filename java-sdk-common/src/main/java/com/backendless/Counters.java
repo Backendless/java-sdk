@@ -28,6 +28,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+
+/**
+ * Use Hive.
+ */
+@Deprecated
 public final class Counters
 {
   protected static final String ATOMIC_MANAGER_SERVER_ALIAS = "com.backendless.services.redis.AtomicOperationService";

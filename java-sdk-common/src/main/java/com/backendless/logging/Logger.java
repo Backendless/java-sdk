@@ -20,9 +20,7 @@ package com.backendless.logging;
 
 import com.backendless.exceptions.ExceptionMessage;
 
-/**
- * Created by baas on 21.04.15.
- */
+
 public class Logger
 {
   private final String name;

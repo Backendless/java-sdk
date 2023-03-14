@@ -3,6 +3,11 @@ package com.backendless;
 import com.backendless.async.callback.AsyncCallback;
 
 
+/**
+ * Use Hive.
+ * @param <T>
+ */
+@Deprecated
 class AtomicCounterImpl<T> implements IAtomic<T>
 {
   private final com.backendless.Counters counters;

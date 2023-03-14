@@ -24,6 +24,11 @@ import com.backendless.async.callback.AsyncCallback;
 import java.util.Date;
 
 
+/**
+ * Use Hive.
+ * @param <T>
+ */
+@Deprecated
 public class CacheService<T> implements ICache<T>
 {
   private final Class<? extends T> clazz;

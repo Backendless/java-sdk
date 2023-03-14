@@ -20,6 +20,12 @@ package com.backendless;
 
 import com.backendless.async.callback.AsyncCallback;
 
+
+/**
+ * Use Hive.
+ * @param <T>
+ */
+@Deprecated
 public interface IAtomic<T>
 {
   void reset();
