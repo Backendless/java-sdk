@@ -30,6 +30,7 @@ import weborb.client.IResponder;
 import weborb.client.WeborbClient;
 import weborb.util.ThreadContext;
 
+import javax.net.ssl.HostnameVerifier;
 import java.util.Collections;
 import java.util.Hashtable;
 
@@ -41,17 +42,22 @@ public class Invoker
   private static final String DESTINATION = "GenericDestination";
   private static final int DEFAULT_TIMEOUT = 100500;
   private static WeborbClient weborbClient;
+  private static HostnameVerifier hostnameVerifier;
 
   static void reinitialize()
   {
     String urlEnding = BackendlessInternal.getApplicationUrl() + "/binary";
     weborbClient = new WeborbClient( urlEnding, DEFAULT_TIMEOUT, DESTINATION );
     weborbClient.setCookiesDateFormat( "EEE, dd-MMM-yy HH:mm:ss z" );
+    if( hostnameVerifier != null )
+      weborbClient.setHostnameVerifier( hostnameVerifier );
   }
 
-  public static WeborbClient getWebOrbClient()
+  static void setHostnameVerifier( HostnameVerifier hostnameVerifier )
   {
-    return weborbClient;
+    Invoker.hostnameVerifier = hostnameVerifier;
+    if( weborbClient != null )
+      weborbClient.setHostnameVerifier( hostnameVerifier );
   }
 
   public static <T> void invokeAsync( String className, String methodName, Object[] args, AsyncCallback<T> callback )
@@ -93,7 +99,7 @@ public class Invoker
     try
     {
       ThreadContext.cleanup();
-      getWebOrbClient().invoke( className, methodName, args, Collections.emptyMap(), null, new Hashtable<>( injector.getHeadersManager().getHeaders() ), chainedResponder );
+      weborbClient.invoke( className, methodName, args, Collections.emptyMap(), null, new Hashtable<>( injector.getHeadersManager().getHeaders() ), chainedResponder );
     }
     catch( Exception e )
     {
