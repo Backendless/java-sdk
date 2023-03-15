@@ -39,7 +39,7 @@ public final class Backendless
     BackendlessInternal.init();
     injector.setMessaging( com.backendless.AndroidMessaging.getInstance() );
 
-    //Invoker.getWebOrbClient().setHostnameVerifier( new org.apache.http.conn.ssl.StrictHostnameVerifier() );
+    Invoker.setHostnameVerifier( new org.apache.http.conn.ssl.BrowserCompatHostnameVerifier() );
     // TODO: the new one is okhttp3.internal.tls.OkHostnameVerifier.INSTANCE
 
     return true;
