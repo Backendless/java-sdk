@@ -110,8 +110,22 @@ public class PushTemplateHelper
     else
       notificationBuilder.setBadgeIconType( NotificationCompat.BADGE_ICON_NONE );
 
-    if( template.getBadgeNumber() != null )
-      notificationBuilder.setNumber( template.getBadgeNumber() );
+    String badgeNumberStr = newBundle.getString( PublishOptions.ANDROID_BADGE_TAG );
+    Integer badgeNumber = template.getBadgeNumber();
+    if( badgeNumberStr != null )
+    {
+      try
+      {
+        badgeNumber = Integer.getInteger( badgeNumberStr );
+      }
+      catch( NumberFormatException ignore )
+      {
+        Log.w( PushTemplateHelper.class.getSimpleName(), "BadgeNumber isn't a valid number: " + badgeNumberStr );
+      }
+    }
+
+    if ( badgeNumber != null && badgeNumber > 0 )
+      notificationBuilder.setNumber( badgeNumber );
 
     if( template.getCancelAfter() != null && template.getCancelAfter() != 0 )
       notificationBuilder.setTimeoutAfter( template.getCancelAfter() * 1000 );
