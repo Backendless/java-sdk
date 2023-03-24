@@ -120,7 +120,7 @@ public class PushTemplateHelper
     {
       try
       {
-        badgeNumber = Integer.getInteger( badgeNumberStr );
+        badgeNumber = Integer.parseInt( badgeNumberStr );
       }
       catch( NumberFormatException ignore )
       {
