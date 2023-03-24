@@ -68,12 +68,12 @@ Optional dependencies
 <dependency>
     <groupId>io.socket</groupId>
     <artifactId>socket.io-client</artifactId>
-    <version>2.1.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 or
 ```groovy
-  api 'io.socket:socket.io-client:2.1.0'
+  api 'io.socket:socket.io-client:1.0.0'
 ```
 
 
