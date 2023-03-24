@@ -1,11 +1,13 @@
 package com.backendless.push;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
@@ -35,6 +38,7 @@ import java.util.Map;
 
 public class PushTemplateHelper
 {
+  private static final String TAG = PushTemplateHelper.class.getSimpleName();
   private static final BackendlessInjector injector = BackendlessInjector.getInstance();
 
   public static final String IMMEDIATE_MESSAGE = "ImmediateMessage";
@@ -110,8 +114,22 @@ public class PushTemplateHelper
     else
       notificationBuilder.setBadgeIconType( NotificationCompat.BADGE_ICON_NONE );
 
-    if( template.getBadgeNumber() != null )
-      notificationBuilder.setNumber( template.getBadgeNumber() );
+    String badgeNumberStr = newBundle.getString( PublishOptions.ANDROID_BADGE_TAG );
+    Integer badgeNumber = template.getBadgeNumber();
+    if( badgeNumberStr != null )
+    {
+      try
+      {
+        badgeNumber = Integer.parseInt( badgeNumberStr );
+      }
+      catch( NumberFormatException ignore )
+      {
+        Log.w( TAG, "BadgeNumber isn't a valid number: " + badgeNumberStr );
+      }
+    }
+
+    if( badgeNumber != null && badgeNumber > 0 )
+      notificationBuilder.setNumber( badgeNumber );
 
     if( template.getCancelAfter() != null && template.getCancelAfter() != 0 )
       notificationBuilder.setTimeoutAfter( template.getCancelAfter() * 1000 );
@@ -126,11 +144,11 @@ public class PushTemplateHelper
         if( bitmap != null )
           notificationBuilder.setStyle( new NotificationCompat.BigPictureStyle().bigPicture( bitmap ) );
         else
-          Log.i( PushTemplateHelper.class.getSimpleName(), "Cannot convert rich media for notification into bitmap." );
+          Log.i( TAG, "Cannot convert rich media for notification into bitmap." );
       }
       catch( IOException e )
       {
-        Log.e( PushTemplateHelper.class.getSimpleName(), "Cannot receive rich media for notification." );
+        Log.e( TAG, "Cannot receive rich media for notification." );
       }
     }
     else if( messageText.length() > 35 )
@@ -151,11 +169,11 @@ public class PushTemplateHelper
           if( bitmap != null )
             notificationBuilder.setLargeIcon( bitmap );
           else
-            Log.i( PushTemplateHelper.class.getSimpleName(), "Cannot convert Large Icon into bitmap." );
+            Log.i( TAG, "Cannot convert Large Icon into bitmap." );
         }
         catch( IOException e )
         {
-          Log.e( PushTemplateHelper.class.getSimpleName(), "Cannot receive bitmap for Large Icon." );
+          Log.e( TAG, "Cannot receive bitmap for Large Icon." );
         }
       }
       else
@@ -360,6 +378,19 @@ public class PushTemplateHelper
       @Override
       public void run()
       {
+        if( ActivityCompat.checkSelfPermission( context, Manifest.permission.POST_NOTIFICATIONS ) != PackageManager.PERMISSION_GRANTED )
+        {
+          Log.e( TAG, "Application has not permission: android.permission.POST_NOTIFICATIONS." );
+
+          // TODO: Consider calling
+          //    ActivityCompat#requestPermissions
+          // here to request the missing permissions, and then overriding
+          //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+          //                                          int[] grantResults)
+          // to handle the case where the user grants the permission. See the documentation
+          // for ActivityCompat#requestPermissions for more details.
+          return;
+        }
         notificationManager.notify( tag, notificationId, notification );
       }
     } );
