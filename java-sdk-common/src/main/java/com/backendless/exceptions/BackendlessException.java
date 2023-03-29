@@ -23,6 +23,7 @@ import lombok.Setter;
 
 import java.util.Map;
 
+
 public class BackendlessException extends RuntimeException
 {
   private static final long serialVersionUID = -7537447408166433783L;
@@ -42,36 +43,37 @@ public class BackendlessException extends RuntimeException
 
   public BackendlessException( String message, int httpStatusCode )
   {
-   this(message);
+    this( message );
     this.httpStatusCode = httpStatusCode;
   }
 
   public BackendlessException( String message, Throwable throwable )
   {
-    super(message, throwable);
+    super( message, throwable );
+    this.backendlessFault = new BackendlessFault( message );
   }
 
   public BackendlessException( String message, Throwable throwable, int httpStatusCode )
   {
-    this(message, throwable);
+    this( message, throwable );
     this.httpStatusCode = httpStatusCode;
   }
 
   public BackendlessException( Throwable throwable )
   {
     super( throwable );
-    backendlessFault = new BackendlessFault( throwable );
+    this.backendlessFault = new BackendlessFault( throwable );
   }
 
   public BackendlessException( String code, String message )
   {
     super( message );
-    backendlessFault = new BackendlessFault( code, message );
+    this.backendlessFault = new BackendlessFault( code, message );
   }
 
   public BackendlessException( String code, String message, int httpStatusCode )
   {
-    this(code, message);
+    this( code, message );
     this.httpStatusCode = httpStatusCode;
   }
 
@@ -89,7 +91,6 @@ public class BackendlessException extends RuntimeException
   @Override
   public String getMessage()
   {
-
     final String message = backendlessFault.getMessage();
     return message == null ? backendlessFault.getDetail() : message;
   }
@@ -107,12 +108,12 @@ public class BackendlessException extends RuntimeException
   @Override
   public String toString()
   {
-    String sb = getClass().getSimpleName() +
+    return getClass().getSimpleName() +
             "{ code: '" + getCode() + '\'' +
             ", message: '" + getMessage() + '\'' +
-            ", extendedData: '" + getExtendedData() + '\'' +
             ", detail: '" + getDetail() + '\'' +
+            ", extendedData: '" + getExtendedData() + '\'' +
+            ", httpStatusCode: '" + getHttpStatusCode() + '\'' +
             " }";
-    return sb;
   }
 }
