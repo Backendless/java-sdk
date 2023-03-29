@@ -93,6 +93,6 @@ Choose:
 - `Java Client SDK For Backendless` -> `java-client-sdk`  
 - `Android Client SDK For Backendless` -> `android-client-sdk`  
 
-https://central.sonatype.com/namespace/com.backendless
-or
-https://mvnrepository.com/artifact/com.backendless
+https://central.sonatype.com/namespace/com.backendless  
+or  
+https://mvnrepository.com/artifact/com.backendless  
