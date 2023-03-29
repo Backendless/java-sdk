@@ -85,3 +85,14 @@ dependencies {
   api 'com.google.firebase:firebase-iid:21.1.0'
 }
 ```
+
+
+Direct links to the MAVEN CENTRAL repository for backendless:
+========================================
+Choose:  
+- `Java Client SDK For Backendless` -> `java-client-sdk`  
+- `Android Client SDK For Backendless` -> `android-client-sdk`  
+
+https://central.sonatype.com/namespace/com.backendless
+or
+https://mvnrepository.com/artifact/com.backendless
