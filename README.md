@@ -87,7 +87,7 @@ dependencies {
 ```
 
 
-Direct links to the MAVEN CENTRAL repository for backendless:
+Direct links to the Maven Central repository:
 ========================================
 Choose:  
 - `Java Client SDK For Backendless` -> `java-client-sdk`  
