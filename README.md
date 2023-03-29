@@ -23,7 +23,12 @@ Maven Integration
 --------------------------------------------------------------------------------
 The backendless client library for Android and Java is available through the central [Maven](http://mvnrepository.com/artifact/com.backendless/backendless) repository. Since the version of Backendless deployed to maven changes frequently, make sure to lookup the latest version number from Maven Central. To add a dependency for the  library, add the following to pom.xml (make sure to replace "VERSION" with a specific version number):  
 
-**Java Plain**
+**Direct Links** to the Maven Central repository:  
+https://central.sonatype.com/namespace/com.backendless  
+https://mvnrepository.com/artifact/com.backendless  
+
+
+**Java Client SDK For Backendless** -> `java-client-sdk`
 ```xml
 <dependency>
   <groupId>com.backendless</groupId>
@@ -32,7 +37,7 @@ The backendless client library for Android and Java is available through the cen
 </dependency>
 ```
 
-**Java for Android**
+**Android Client SDK For Backendless** -> `android-client-sdk`  
 ```xml
 <dependency>
   <groupId>com.backendless</groupId>
@@ -87,12 +92,4 @@ dependencies {
 ```
 
 
-Direct links to the Maven Central repository:
-========================================
-Choose:  
-- `Java Client SDK For Backendless` -> `java-client-sdk`  
-- `Android Client SDK For Backendless` -> `android-client-sdk`  
 
-https://central.sonatype.com/namespace/com.backendless  
-or  
-https://mvnrepository.com/artifact/com.backendless  
