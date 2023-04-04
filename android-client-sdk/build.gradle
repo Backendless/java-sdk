@@ -55,7 +55,7 @@ android {
   lint {
     abortOnError false
 //    baseline = file( project.buildDir.toPath(  ).resolve( "lint-baseline.xml") )
-    baseline = file( "lint-baseline.xml" )
+//    baseline = file( "lint-baseline.xml" )
   }
 
   buildTypes {
