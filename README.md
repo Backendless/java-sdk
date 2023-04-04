@@ -1,8 +1,5 @@
 Backendless SDK for Java and Android  
 ========================================
-[![Build Status](https://travis-ci.org/Backendless/java-sdk.svg)](https://travis-ci.org/Backendless/java-sdk)
-
---------------------------------------------------------------------------------
 
 Welcome to Backendless! In this document you will find the instructions for getting up and running with Backendless quickly. The SDK you downloaded contains a library [link-to-maven](https://mvnrepository.com/artifact/com.backendless) with the APIs, which provide access to the Backendless services. These services enable the server-side functionality for developing and running mobile and desktop applications. Follow the steps below to get started with Backendless:
 
