@@ -2,6 +2,7 @@ package com.backendless.persistence;
 
 
 import weborb.reader.AnonymousObject;
+import weborb.reader.CacheableAdaptingTypeWrapper;
 import weborb.reader.NamedObject;
 import weborb.reader.NullType;
 import weborb.reader.ReferenceCache;
@@ -18,6 +19,9 @@ public class BackendlessGeometryFactory implements IArgumentObjectFactory
   @Override
   public Object createObject( IAdaptingType adaptingType )
   {
+    if( adaptingType instanceof CacheableAdaptingTypeWrapper )
+      adaptingType = ((CacheableAdaptingTypeWrapper) adaptingType).getType();
+
     if( adaptingType instanceof NamedObject )
       adaptingType = ((NamedObject) adaptingType).getTypedObject();
 
