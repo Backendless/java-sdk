@@ -50,7 +50,7 @@ class DataStore<T> implements IDataStore<T>
   @Override
   public T save( final T entity, boolean isUpsert ) throws BackendlessException
   {
-    return persistence.save( entity );
+    return persistence.save( entity, isUpsert );
   }
 
   @Override
@@ -62,7 +62,7 @@ class DataStore<T> implements IDataStore<T>
   @Override
   public void save( final T entity, boolean isUpsert, final AsyncCallback<T> responder )
   {
-    persistence.save( entity, responder );
+    persistence.save( entity, isUpsert, responder );
   }
 
   @Override
