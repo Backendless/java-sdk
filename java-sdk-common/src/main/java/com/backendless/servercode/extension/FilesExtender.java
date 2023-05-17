@@ -67,6 +67,10 @@ public abstract class FilesExtender
     afterMoveToRepository( context, fileUrlLocation, result );
   }
 
+  public void beforeDownload( RunnerContext context, String fileUrlLocation ) throws Exception
+  {
+  }
+
   @Deprecated
   public void beforeDeleteFileOrDirectory( RunnerContext context, String fileUrlLocation ) throws Exception
   {
