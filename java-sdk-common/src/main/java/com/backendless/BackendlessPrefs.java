@@ -43,8 +43,8 @@ public abstract class BackendlessPrefs
     if( authKeys == null )
       restoreAuthKeysFromPreferences();
 
-    if( authKeys == null && getCustomDomain() == null )
-      throw new IllegalStateException( ExceptionMessage.NOT_INITIALIZED );
+//    if( authKeys == null && getCustomDomain() == null )
+//      throw new IllegalStateException( ExceptionMessage.NOT_INITIALIZED );
 
     return authKeys;
   }
