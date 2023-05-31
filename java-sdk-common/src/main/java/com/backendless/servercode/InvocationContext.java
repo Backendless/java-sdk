@@ -23,9 +23,7 @@ import com.backendless.commons.DeviceType;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by oleg on 22.07.15.
- */
+
 public class InvocationContext extends AbstractContext
 {
   private static ThreadLocal<InvocationContext> threadLocal = new InheritableThreadLocal<InvocationContext>(){
