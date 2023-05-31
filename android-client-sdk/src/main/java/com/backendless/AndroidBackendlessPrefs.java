@@ -44,6 +44,7 @@ public class AndroidBackendlessPrefs extends BackendlessPrefs
   public void init()
   {
     this.sharedPreferences = ((Context) getContext()).getSharedPreferences( PREFS_NAME, Context.MODE_PRIVATE );
+    this.restoreAuthKeysFromPreferences();
     super.init();
   }
 
@@ -156,18 +157,7 @@ public class AndroidBackendlessPrefs extends BackendlessPrefs
     return false;
   }
 
-  private synchronized AuthKeys getAuthKeys()
-  {
-    if( authKeys == null )
-      restoreAuthKeysFromPreferences();
-
-    if( authKeys == null && getCustomDomain() == null )
-      throw new IllegalStateException( ExceptionMessage.NOT_INITIALIZED );
-
-    return authKeys;
-  }
-
-  private boolean restoreAuthKeysFromPreferences()
+  protected boolean restoreAuthKeysFromPreferences()
   {
     if( sharedPreferences == null )
       throw new IllegalStateException( ExceptionMessage.NOT_INITIALIZED );

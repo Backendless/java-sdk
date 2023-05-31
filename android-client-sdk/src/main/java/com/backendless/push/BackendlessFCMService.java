@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import com.backendless.Backendless;
 import com.backendless.BackendlessInjector;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -51,6 +52,11 @@ public class BackendlessFCMService extends FirebaseMessagingService
 
   public BackendlessFCMService()
   {
+    // will init the backendless sdk according to the current environment
+    // also calls initApp() if appId and apiKey were stored in prefs
+    if ( !Backendless.isInitialized() )
+      Log.w( TAG, "Backendless app wasn't initialized before or android app was reset." );
+
     if( BackendlessFCMService.notificationIdGenerator == null )
       BackendlessFCMService.notificationIdGenerator = new AtomicInteger( injector.getPrefs().getNotificationIdGeneratorInitValue() );
   }

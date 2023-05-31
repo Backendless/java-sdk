@@ -1,5 +1,5 @@
 plugins {
-  id 'com.android.library' version '7.4.0-beta02'
+  id 'com.android.library' version '7.4.1'
 }
 
 group 'com.backendless'

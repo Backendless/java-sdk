@@ -36,6 +36,19 @@ public abstract class BackendlessPrefs
 
   abstract protected void retrieveOSVersion();
 
+  abstract protected boolean restoreAuthKeysFromPreferences();
+
+  protected synchronized AuthKeys getAuthKeys()
+  {
+    if( authKeys == null )
+      restoreAuthKeysFromPreferences();
+
+//    if( authKeys == null && getCustomDomain() == null )
+//      throw new IllegalStateException( ExceptionMessage.NOT_INITIALIZED );
+
+    return authKeys;
+  }
+
   public void init()
   {
     this.retrieveDeviceId();
@@ -75,16 +88,6 @@ public abstract class BackendlessPrefs
   public synchronized HashMap<String, String> getHeaders()
   {
     return headers;
-  }
-
-  private synchronized AuthKeys getAuthKeys()
-  {
-    return authKeys;
-  }
-
-  boolean isAuthKeysExist()
-  {
-    return authKeys != null;
   }
 
   public void setUrl( String url )
