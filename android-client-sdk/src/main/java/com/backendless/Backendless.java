@@ -50,6 +50,7 @@ public final class Backendless
   public static final FootprintsManager FootprintsManager = BackendlessInjector.getInstance().getFootprintsManager();
   public static final UserService UserService = BackendlessInjector.getInstance().getUserService();
   public static final Persistence Data = BackendlessInjector.getInstance().getPersistence();
+  public static final Persistence Persistence = BackendlessInjector.getInstance().getPersistence();
   public static final Messaging Messaging = BackendlessInjector.getInstance().getMessaging();
   public static final Files Files = BackendlessInjector.getInstance().getFiles();
   public static final Commerce Commerce = BackendlessInjector.getInstance().getCommerce();
