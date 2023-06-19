@@ -14,6 +14,7 @@ public abstract class AbstractContext
   protected List<String> userRoles;
   protected DeviceType deviceType;
   protected Map<String, String> httpHeaders;
+  protected Map<String, String> httpQueryParams;
 
   @Override
   public String toString()
