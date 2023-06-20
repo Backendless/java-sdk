@@ -41,7 +41,6 @@ public class InvocationContext extends AbstractContext
 
   private String httpPath;
   private Map<String, String> httpPathParams;
-  private Map<String, String> httpQueryParams;
   private Map<String, String> httpResponseHeaders;
 
   private InvocationContext( String appId, String userId, String userToken, String userLocale, List<String> userRoles,

@@ -160,6 +160,16 @@ public class RunnerContext extends AbstractContext
       this.httpResponseHeaders = httpResponseHeaders;
   }
 
+  public Map<String, String> getHttpQueryParams()
+  {
+    return httpQueryParams;
+  }
+
+  public void setHttpQueryParams( Map<String, String> httpQueryParams )
+  {
+    this.httpQueryParams = httpQueryParams;
+  }
+
   @Override
   public String toString()
   {
