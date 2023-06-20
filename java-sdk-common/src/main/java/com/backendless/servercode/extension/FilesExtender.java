@@ -67,7 +67,7 @@ public abstract class FilesExtender
     afterMoveToRepository( context, fileUrlLocation, result );
   }
 
-  public void beforeDownload( RunnerContext context, String fileUrlLocation ) throws Exception
+  public void beforeDownload( RunnerContext context, String fileUrlLocation, String fileRelativePath ) throws Exception
   {
   }
 
