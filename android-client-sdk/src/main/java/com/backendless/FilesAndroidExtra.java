@@ -26,7 +26,6 @@ import com.backendless.files.BackendlessFile;
 import com.backendless.files.router.BitmapOutputStreamRouter;
 
 
-@Deprecated
 public final class FilesAndroidExtra
 {
   private static final FilesAndroidExtra instance = new FilesAndroidExtra();
