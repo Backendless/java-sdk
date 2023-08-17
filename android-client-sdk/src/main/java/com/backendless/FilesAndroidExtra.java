@@ -31,7 +31,7 @@ public final class FilesAndroidExtra
   private static final FilesAndroidExtra instance = new FilesAndroidExtra();
   public final BackendlessInjector injector = BackendlessInjector.getInstance();
 
-  static FilesAndroidExtra getInstance()
+  public static FilesAndroidExtra getInstance()
   {
     return instance;
   }
