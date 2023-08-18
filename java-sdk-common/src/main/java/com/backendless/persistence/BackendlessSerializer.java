@@ -195,6 +195,10 @@ public abstract class BackendlessSerializer
       {
         continue;
       }
+      else if( entityEntryValue instanceof BackendlessExpression )
+      {
+        continue;
+      }
       else //not collection
       {
         if( !isBelongsJdk( entityEntryValue.getClass() ) )
