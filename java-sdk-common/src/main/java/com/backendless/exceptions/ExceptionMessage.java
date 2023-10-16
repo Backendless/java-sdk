@@ -98,7 +98,7 @@ public class ExceptionMessage
   public static final String NULL_GRAPH_USER = "Could not get GraphUser from Facebook session";
   public final static String FACEBOOK_LOGINNING_CANCELED = "Facebook login canceled";
   public static final String NOT_ANDROID = "Operation may be performed only from an Android environment";
-  public static final String ASSIGN_ROLE = "Assigning/Unassigning/Creation/Deletion a role can be done only from server code";
+  public static final String ASSIGN_ROLE = "Assigning/Unassigning/Creation/Deletion a role can be done only from CloudCode API key";
   public static final String NULL_BODYPARTS = "BodyParts cannot be null";
   public static final String NULL_SUBJECT = "Subject cannot be null";
   public static final String NULL_RECIPIENTS = "Recipients cannot be empty";
