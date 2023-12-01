@@ -83,13 +83,11 @@ public class FCMRegistration
       public void handleResponse( String registrationInfo )
       {
         Log.d( TAG, "Registered on Backendless." );
+        Map<String, String> channelRegistrations = processRegistrationPayload( appContext, registrationInfo );
         try
         {
           if( callback != null )
-          {
-            Map<String, String> channelRegistrations = processRegistrationPayload( appContext, registrationInfo );
             callback.handleResponse( devRegResult.setChannelRegistrations( channelRegistrations ) );
-          }
         }
         catch( Exception e )
         {
@@ -100,9 +98,9 @@ public class FCMRegistration
       @Override
       public void handleFault( BackendlessFault fault )
       {
-        Log.d( TAG, "Could not register device on Backendless server: " + fault.toString() );
+        Log.d( TAG, "Could not register device on Backendless server: " + fault );
         if( callback != null )
-          callback.handleFault( new BackendlessFault( "Could not register device on Backendless server: " + fault.toString() ) );
+          callback.handleFault( new BackendlessFault( "Could not register device on Backendless server: " + fault ) );
       }
     } );
   }
