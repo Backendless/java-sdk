@@ -43,7 +43,7 @@ public class GroupResultAdaptingPolicy<E> implements IAdaptingPolicy<E>
     List<NamedObject> namedObjects = new ArrayList<>();
     namedObjects.add( namedObj );
 
-    while( ((AnonymousObject) namedObjects.get( 0 ).getTypedObject()).getProperties().containsKey( "hasNextPage" ) )
+    while( !namedObjects.isEmpty() && ((AnonymousObject) namedObjects.get( 0 ).getTypedObject()).getProperties().containsKey( "hasNextPage" ) )
     {
       List<NamedObject> nextLevel = new ArrayList<>();
       for( NamedObject namedObject : namedObjects )

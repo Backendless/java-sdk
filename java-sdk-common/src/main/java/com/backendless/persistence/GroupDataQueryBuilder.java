@@ -261,8 +261,6 @@ public class GroupDataQueryBuilder
     {
       if( grb != null && !grb.equals( "" ) )
       {
-        if( !grb.startsWith( "'" ) && !grb.endsWith( "'" ) )
-          grb = "'" + grb + "'";
         this.groupBy.add( grb );
       }
     }
