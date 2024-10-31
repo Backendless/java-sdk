@@ -213,7 +213,7 @@ final class BackendlessInternal
       int read;
       byte[] fbuf = new byte[ 2048 ];
       try ( BufferedInputStream bufInStream = new BufferedInputStream( urlConnection.getInputStream() )) {
-        while( (read = bufInStream.read( fbuf )) != 1 )
+        while( (read = bufInStream.read( fbuf )) != -1 )
           response.append( new String( fbuf, 0, read ) );
       }
     }
