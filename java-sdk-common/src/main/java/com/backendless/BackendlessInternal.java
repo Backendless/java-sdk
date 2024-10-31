@@ -18,6 +18,7 @@
 
 package com.backendless;
 
+
 import com.backendless.exceptions.ExceptionMessage;
 import com.backendless.files.BackendlessFile;
 import com.backendless.files.BackendlessFileFactory;
@@ -57,9 +58,12 @@ import weborb.writer.ITypeWriter;
 import weborb.writer.MessageWriter;
 import weborb.writer.amf.AmfV3Formatter;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -143,7 +147,12 @@ final class BackendlessInternal
   private BackendlessInternal()
   {
   }
-
+  
+  static boolean isInitialized()
+  {
+    return initialized;
+  }
+  
   /**
    * Initializes the Backendless API and all Backendless dependencies. This is the first step in using the client API.
    * <p>
@@ -155,9 +164,17 @@ final class BackendlessInternal
    */
   static void initApp( String applicationId, String apiKey )
   {
-    initApp( BackendlessInjector.getInstance().getContextHandler().getAppContext(), applicationId, apiKey );
+    setAppIdAndApiKey( applicationId, apiKey );
+    initApp();
   }
-
+  
+  static void initApp( Object context, final String applicationId, final String apiKey )
+  {
+    setAppIdAndApiKey(applicationId, apiKey);
+    BackendlessInjector.getInstance().getContextHandler().setContext(context);
+    initApp();
+  }
+  
   /**
    * Initializes the Backendless API and all Backendless dependencies. This is the first step in using the client API.
    * <p>
@@ -168,52 +185,62 @@ final class BackendlessInternal
    */
   static void initApp( String customDomain )
   {
-    initApp( BackendlessInjector.getInstance().getContextHandler().getAppContext(), customDomain );
+    initApp( (Object) null, customDomain );
   }
-
-  static boolean isInitialized()
-  {
-    return initialized;
-  }
-
+  
   static void initApp( Object context, final String customDomain )
   {
     if( customDomain == null || customDomain.trim().isEmpty() )
       throw new IllegalArgumentException( "Custom domain cant be null or empty" );
-
-    if( customDomain.startsWith( "http" ) )
-      setUrl( customDomain );
-    else
-      setUrl( "http://" + customDomain );
-
-    URI uri;
-    try
-    {
-      uri = new URI( getUrl() );
+    
+    final URI uri;
+    try {
+	    uri = customDomain.startsWith("http") ? new URI(customDomain) : new URI("http://" + customDomain);
     }
     catch( URISyntaxException e )
     {
-      throw new RuntimeException( e );
+      throw new IllegalArgumentException( "Domain passed in wrong form.", e );
     }
-
-    prefs.setCustomDomain( uri.getHost() );
-    BackendlessInjector.getInstance().getContextHandler().setContext( context );
+    
+    StringBuilder response;
+    try {
+      URL apiInfoUrl = new URL( uri + "/api/info" );
+      HttpURLConnection urlConnection = (HttpURLConnection) apiInfoUrl.openConnection();
+      if ( urlConnection.getResponseCode() != 200 )
+        throw new IllegalStateException( "Server returned " + urlConnection.getResponseCode() + " " + urlConnection.getResponseMessage() );
+        
+      response = new StringBuilder(10 * 1024);
+      int read;
+      byte[] fbuf = new byte[ 2048 ];
+      try ( BufferedInputStream bufInStream = new BufferedInputStream( urlConnection.getInputStream() )) {
+        while( (read = bufInStream.read( fbuf )) != 1 )
+          response.append( new String( fbuf, 0, read ) );
+      }
+    }
+    catch (IOException e) {
+      throw new IllegalStateException( "Cannot retrieve app info from Backendless server using domain '" + getUrl() + "'.", e );
+    }
+  
+	Map<String, Object> appInfo = JSONUtil.getJsonConverter().readObject( response.toString(), Map.class );
+    
+    prefs.setCustomDomain(uri.getHost());
+    setAppIdAndApiKey((String) appInfo.get("appId"), (String) appInfo.get("apiKey"));
+    setUrl(uri.toString());
+    BackendlessInjector.getInstance().getContextHandler().setContext(context);
     initApp();
   }
-
-  static void initApp( Object context, final String applicationId, final String apiKey )
+  
+  private static void setAppIdAndApiKey( final String applicationId, final String apiKey )
   {
-    if( applicationId == null || applicationId.equals( "" ) )
+    if( applicationId == null || applicationId.isEmpty())
       throw new IllegalArgumentException( ExceptionMessage.NULL_APPLICATION_ID );
-
-    if( apiKey == null || apiKey.equals( "" ) )
+    
+    if( apiKey == null || apiKey.isEmpty())
       throw new IllegalArgumentException( ExceptionMessage.NULL_API_KEY );
-
+    
     prefs.initPreferences( applicationId, apiKey );
-    BackendlessInjector.getInstance().getContextHandler().setContext( context );
-    initApp();
   }
-
+  
   private static void initApp()
   {
     if( BackendlessInjector.getInstance().isAndroid() && BackendlessInjector.getInstance().getContextHandler().getAppContext() == null )

@@ -108,7 +108,7 @@ public final class Backendless
 
   public static void initApp( String applicationId, String apiKey )
   {
-    BackendlessInternal.initApp( applicationId, apiKey );
+    BackendlessInternal.initApp( (Object) null, applicationId, apiKey );
   }
 
   public static void initApp( Object context, final String applicationId, final String apiKey )
